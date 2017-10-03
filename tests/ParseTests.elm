@@ -55,6 +55,13 @@ suite =
                     actual = parse "?this%20%26%20that=some%20stuff&x=y"
                 in
                     Expect.equal expected actual
+        , test "Treats empty keys as invalid" <|
+            \_ ->
+                let
+                    expected = [InvalidParam Nothing (Just "v")]
+                    actual = parse "?=v"
+                in
+                    Expect.equal expected actual
         , test "Treats non-decodable keys as invalid" <|
             \_ ->
                 let

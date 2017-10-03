@@ -32,6 +32,7 @@ parsePair s =
         (ek, ev) = StringUtils.splitOnce "=" s
     in
         case (Http.decodeUri ek, Http.decodeUri ev) of
+            (Just "", maybeV) -> InvalidParam Nothing maybeV
             (Just k, Just v) -> ValidParam k v
             (maybeK, maybeV) -> InvalidParam maybeK maybeV
 
