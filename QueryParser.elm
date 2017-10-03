@@ -1,5 +1,8 @@
-module QueryParser exposing (parseQuery, parseValidQuery, Param(..))
+module QueryParser exposing ( parseQuery, parseValidQuery, parseQueryAsDict
+                            , Param(..)
+                            )
 import Http
+import Dict
 import StringUtils
 
 type Param
@@ -18,6 +21,13 @@ parseQuery s =
 
 parseValidQuery : String -> List (String, String)
 parseValidQuery s = List.filterMap unpackValid <| parseQuery s
+
+parseQueryAsDict : String -> Dict.Dict String String
+parseQueryAsDict s =
+    let
+        pairs = parseValidQuery s
+    in
+        List.foldr (\(k, v) -> Dict.insert k v) Dict.empty pairs
 
 parsePair : String -> Param
 parsePair s =
