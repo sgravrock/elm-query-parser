@@ -6,17 +6,26 @@ import Test exposing (Test, describe, fuzz)
 import Dict
 import QueryString exposing (parseValid, build, Param(..))
 
+type alias Conditional a =
+    { retries: Int
+    , fallback: a -> a
+    , condition: a -> Bool
+    }
+
+hasNonEmptyKey : Conditional (String, String)
+hasNonEmptyKey =
+    { retries = 10
+    , fallback = \(k,v) -> (k ++ "x", v)
+    , condition = \(k, v) -> k /= ""
+    }
+
+
 makeQueryParam : Fuzzer (String, String)
 makeQueryParam =
     let
         allValues = tuple (string, string)
     in
-        conditional
-            { retries = 10
-            , fallback = \(k,v) -> (k ++ "x", v)
-            , condition = \(k, v) -> k /= ""
-            }
-            allValues
+        conditional hasNonEmptyKey allValues
 
 makeQueryList : Fuzzer (List (String, String))
 makeQueryList = list makeQueryParam
