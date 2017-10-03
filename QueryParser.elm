@@ -1,4 +1,4 @@
-module QueryParser exposing (parseQuery, Param(..))
+module QueryParser exposing (parseQuery, parseValidQuery, Param(..))
 import Http
 import StringUtils
 
@@ -15,6 +15,10 @@ parseQuery s =
     in
         List.map parsePair pairs
 
+
+parseValidQuery : String -> List (String, String)
+parseValidQuery s = List.filterMap unpackValid <| parseQuery s
+
 parsePair : String -> Param
 parsePair s =
     let
@@ -23,3 +27,9 @@ parsePair s =
         case (Http.decodeUri ek, Http.decodeUri ev) of
             (Just k, Just v) -> ValidParam k v
             (maybeK, maybeV) -> InvalidParam maybeK maybeV
+
+unpackValid : Param -> Maybe (String, String)
+unpackValid p =
+    case p of
+        InvalidParam _ _ -> Nothing
+        ValidParam k v -> Just (k, v)
