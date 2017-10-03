@@ -1,4 +1,4 @@
-module QueryParser exposing ( parseQuery, parseValidQuery, parseQueryAsDict
+module QueryString exposing ( parseQuery, parseValidQuery, parseQueryAsDict
                             , Param(..)
                             )
 import Http

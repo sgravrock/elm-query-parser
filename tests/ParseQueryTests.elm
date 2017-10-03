@@ -3,7 +3,7 @@ module ParseQueryTests exposing (..)
 import Expect exposing (Expectation)
 import Fuzz exposing (Fuzzer, int, list, string)
 import Test exposing (..)
-import QueryParser exposing (parseQuery, Param(..))
+import QueryString exposing (parseQuery, Param(..))
 
 
 suite : Test
