@@ -12,12 +12,9 @@ type Param
 
 parse : String -> List Param
 parse s =
-    let
-        qs = dropPrefix s
-        pairs = String.split "&" qs
-    in
-        List.map parsePair pairs
-
+    case dropPrefix s of
+        "" -> []
+        qs -> List.map parsePair (String.split "&" qs)
 
 parseValid : String -> List (String, String)
 parseValid s = List.filterMap unpackValid <| parse s

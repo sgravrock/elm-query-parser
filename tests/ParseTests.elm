@@ -9,7 +9,9 @@ import QueryString exposing (parse, Param(..))
 suite : Test
 suite =
     describe "parse"
-        [ test "returns params in order" <|
+        [ test "parses an empty query string" <|
+            \_ -> Expect.equal [] (parse "?")
+        , test "returns params in order" <|
             \_ -> 
                 let
                     expected = [ValidParam "foo" "bar", ValidParam "baz" "qux"]
