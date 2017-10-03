@@ -1,5 +1,5 @@
 module QueryString exposing ( parse, parseValid, parseToDict
-                            , Param(..)
+                            , build, Param(..)
                             )
 import Http
 import Dict
@@ -47,3 +47,13 @@ dropPrefix s =
     case String.uncons s of
         Just ('?', xs) -> xs
         _ -> s
+
+build : List (String, String) -> String
+build xs =
+    let
+        params = List.map buildParam xs
+    in
+        "?" ++ String.join "&" params
+
+buildParam : (String, String) -> String
+buildParam (k, v) = (Http.encodeUri k) ++ "=" ++ (Http.encodeUri v)
