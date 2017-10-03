@@ -13,7 +13,7 @@ type Param
 parse : String -> List Param
 parse s =
     let
-        qs = String.dropLeft 1 s
+        qs = dropPrefix s
         pairs = String.split "&" qs
     in
         List.map parsePair pairs
@@ -43,3 +43,9 @@ unpackValid p =
     case p of
         InvalidParam _ _ -> Nothing
         ValidParam k v -> Just (k, v)
+
+dropPrefix : String -> String
+dropPrefix s =
+    case String.uncons s of
+        Just ('?', xs) -> xs
+        _ -> s

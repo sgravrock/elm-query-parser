@@ -16,6 +16,13 @@ suite =
                     actual = parse "?foo=bar&baz=qux"
                 in
                     Expect.equal expected actual
+        , test "ignores missing ? prefix" <|
+            \_ ->
+                let
+                    expected = [ValidParam "foo" "bar", ValidParam "baz" "qux"]
+                    actual = parse "foo=bar&baz=qux"
+                in
+                    Expect.equal expected actual
         , test "treats nonexistent = as an empty value" <|
             \_ ->
                 let
