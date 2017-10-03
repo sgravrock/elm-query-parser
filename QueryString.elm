@@ -1,4 +1,4 @@
-module QueryString exposing ( parseQuery, parseValidQuery, parseQueryAsDict
+module QueryString exposing ( parse, parseValid, parseToDict
                             , Param(..)
                             )
 import Http
@@ -10,8 +10,8 @@ type Param
     | ValidParam String String
 
 
-parseQuery : String -> List Param
-parseQuery s =
+parse : String -> List Param
+parse s =
     let
         qs = String.dropLeft 1 s
         pairs = String.split "&" qs
@@ -19,13 +19,13 @@ parseQuery s =
         List.map parsePair pairs
 
 
-parseValidQuery : String -> List (String, String)
-parseValidQuery s = List.filterMap unpackValid <| parseQuery s
+parseValid : String -> List (String, String)
+parseValid s = List.filterMap unpackValid <| parse s
 
-parseQueryAsDict : String -> Dict.Dict String String
-parseQueryAsDict s =
+parseToDict : String -> Dict.Dict String String
+parseToDict s =
     let
-        pairs = parseValidQuery s
+        pairs = parseValid s
     in
         List.foldr (\(k, v) -> Dict.insert k v) Dict.empty pairs
 
