@@ -37,4 +37,27 @@ suite =
                     actual = parseQuery "?foo=a=b=c&bar=d"
                 in
                     Expect.equal expected actual
+        , test "URL-decodes the components" <|
+            \_ ->
+                let
+                    expected = [ ValidParam "this & that" "some stuff"
+                               , ValidParam "x" "y"
+                               ]
+                    actual = parseQuery "?this%20%26%20that=some%20stuff&x=y"
+                in
+                    Expect.equal expected actual
+        , test "Treats non-decodable keys as invalid" <|
+            \_ ->
+                let
+                    expected = [InvalidParam Nothing (Just "v")]
+                    actual = parseQuery "?%=v"
+                in
+                    Expect.equal expected actual
+        , test "Treats non-decodable values as invalid" <|
+            \_ ->
+                let
+                    expected = [InvalidParam (Just "k") Nothing]
+                    actual = parseQuery "?k=%"
+                in
+                    Expect.equal expected actual
         ]
